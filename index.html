@@ -1,20 +1,5 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}</style>
-<title>Sumit Sharma | Computational Imaging Researcher, IIT Madras</title>
-<meta name="description" content="Sumit Sharma is a Ph.D. scholar at IIT Madras working on single-photon camera imaging, 3D scene reconstruction and neural rendering. Publications, experience and contact.">
-<meta name="author" content="Sumit Sharma">
-<link rel="canonical" href="https://sharmavikky786.github.io/">
-<meta property="og:type" content="profile">
-<meta property="og:title" content="Sumit Sharma | Computational Imaging Researcher, IIT Madras">
-<meta property="og:description" content="Sumit Sharma is a Ph.D. scholar at IIT Madras working on single-photon camera imaging, 3D scene reconstruction and neural rendering. Publications, experience and contact.">
-<meta property="og:url" content="https://sharmavikky786.github.io/">
-<meta property="og:site_name" content="Sumit Sharma">
-<meta name="twitter:card" content="summary">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Sumit Sharma", "url": "https://sharmavikky786.github.io/", "jobTitle": "Ph.D. Scholar, Image Processing", "affiliation": {"@type": "CollegeOrUniversity", "name": "Indian Institute of Technology Madras"}, "alumniOf": [{"@type": "CollegeOrUniversity", "name": "GSITS Indore"}], "knowsAbout": ["Single-photon camera imaging", "Computational imaging", "3D reconstruction", "Neural rendering", "Computer vision"], "sameAs": ["https://www.linkedin.com/in/sumit-sharma-0b78a1166/", "https://github.com/sharmavikky786"]}</script>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Sumit Sharma</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
 <style>
 /* Layout: one left-aligned column, 1040px max. Each section is a two-track row:
@@ -31,6 +16,15 @@
   --award: #EBC064;
   --sensor: #04070A;
   --sensor-ink: #C9D6E2;
+  --sensor-dim: #6E7F90;
+  --sensor-grid: #1C2834;
+  --photon: #FFE7A3;
+  /* Silicon layers in the SPAD cross-section */
+  --si-p: #261F3B;
+  --si-abs: #111B26;
+  --si-mz: #0C2A40;
+  --si-n: #1A1D2C;
+  --metal: #8D9AA8;
   --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -150,6 +144,38 @@ h2 { font-family: var(--mono); font-weight: 500; font-size: 13px; letter-spacing
 .copy:hover { border-color: var(--accent); }
 footer { border-top: 1px solid var(--line); padding-top: 20px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
 
+/* Interactive figures: SPAD cross-section and the image lab */
+.lab { display: grid; gap: 18px; }
+.lab > p { max-width: 38em; }
+.lab figure { min-width: 0; }
+#spad-cv { aspect-ratio: 16 / 10; image-rendering: auto; background: var(--sensor); cursor: crosshair; touch-action: manipulation; max-width: 100%; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.steps li {
+  font-family: var(--mono); font-size: 12px; padding: 3px 10px; border-radius: 999px;
+  border: 1px solid var(--sensor-grid); color: var(--sensor-dim);
+  transition: color .25s, background-color .25s, border-color .25s;
+}
+.steps li.on { color: var(--sensor); background: var(--accent); border-color: var(--accent); }
+.status { font-size: 15px; line-height: 1.5; color: var(--sensor-ink); min-height: 3em; margin-top: 10px; max-width: 46em; }
+.ctrl {
+  display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center;
+  margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--sensor-grid);
+  font-family: var(--mono); font-size: 12px;
+}
+.ctrl label { display: inline-flex; align-items: center; gap: 8px; }
+.ctrl input[type="range"] { width: 130px; max-width: 40vw; accent-color: var(--accent); }
+.ctrl input[type="checkbox"] { accent-color: var(--accent); width: 15px; height: 15px; margin: 0; }
+.ctrl output { color: var(--ink); font-weight: 500; font-variant-numeric: tabular-nums; min-width: 4.5em; }
+.sensor .btn-main { background: var(--accent); border-color: var(--accent); color: var(--sensor); font-weight: 500; }
+.sensor .btn-main:hover { background: var(--ink); border-color: var(--ink); color: var(--sensor); }
+.sensor button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+.file { border: 1px solid #364656; padding: 3px 10px; border-radius: 3px; cursor: pointer; }
+.file:hover { border-color: var(--sensor-ink); color: var(--ink); }
+.file:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.file input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.lab-panes canvas { aspect-ratio: auto; height: auto; }
+@media (max-width: 600px) { #spad-cv { aspect-ratio: 3 / 4; } }
+
 @media (max-width: 820px) {
   .hero { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-block: 36px 44px; }
   section { grid-template-columns: minmax(0, 1fr); padding-block: 32px; }
@@ -164,14 +190,14 @@ footer { border-top: 1px solid var(--line); padding-top: 20px; font-family: var(
 }
 </style>
 
-</head>
-<body>
 <canvas id="field" aria-hidden="true"></canvas>
 <div class="wrap">
 
   <header class="bar">
     <span class="who">Sumit Sharma</span>
     <nav aria-label="Sections">
+      <a href="#spad">Inside a pixel</a>
+      <a href="#lab">Image lab</a>
       <a href="#research">Research</a>
       <a href="#publications">Publications</a>
       <a href="#experience">Experience</a>
@@ -218,6 +244,71 @@ footer { border-top: 1px solid var(--line); padding-top: 20px; font-family: var(
       <figcaption class="note">A simulated single-photon camera. Each pixel records only whether a photon arrived, following Poisson statistics. Summing frames and inverting the detection probability recovers the scene, including the lamp that would saturate a normal sensor.</figcaption>
     </figure>
   </div>
+
+  <section id="spad">
+    <h2>Inside a pixel</h2>
+    <div class="body lab">
+      <p>Every pixel of a single-photon camera is a SPAD, a single-photon avalanche diode biased above its breakdown voltage. One photon is enough to set off an avalanche of electrons large enough to count. Click the device to send in a photon, or change the bias and watch how the pixel responds.</p>
+      <figure>
+        <div class="sensor">
+          <canvas id="spad-cv" role="img" aria-label="Animated cross-section of a SPAD pixel. A photon is absorbed and creates an electron and a hole. The electron enters the high-field region and multiplies into an avalanche, which is then quenched and recharged. A scope beside it plots the diode bias, the avalanche current and the digital pixel output."></canvas>
+          <ol class="steps" id="spad-steps">
+            <li data-s="photon">1 · Photon arrives</li>
+            <li data-s="pair">2 · Electron–hole pair</li>
+            <li data-s="aval">3 · Avalanche</li>
+            <li data-s="quench">4 · Quench</li>
+            <li data-s="recharge">5 · Recharge</li>
+          </ol>
+          <p class="status" id="spad-status" aria-live="polite">Ready. The diode is biased 2.5 V above breakdown, waiting for a photon.</p>
+          <div class="ctrl">
+            <button type="button" id="spad-fire" class="btn-main">Send a photon</button>
+            <button type="button" id="spad-auto" aria-pressed="false">Steady light: off</button>
+            <label for="spad-bias">Bias <input type="range" id="spad-bias" min="20" max="30" step="0.5" value="27.5"><output id="spad-bias-o" for="spad-bias">27.5 V</output></label>
+            <label for="spad-dark"><input type="checkbox" id="spad-dark"> Dark counts</label>
+          </div>
+          <div class="read">
+            <span>mode <b id="spad-mode">Geiger</b></span>
+            <span>excess bias <b id="spad-ex">+2.5 V</b></span>
+            <span>carriers <b id="spad-n">0</b></span>
+            <span>counts <b id="spad-c">0</b></span>
+          </div>
+        </div>
+        <figcaption class="note">Simulated with a simple impact-ionization model, with breakdown at 25 V. Above breakdown, each carrier creates on average more than one new carrier as it crosses the high-field region, so the avalanche keeps growing. It stops only when current through the quench resistor pulls the bias below breakdown. A real SPAD releases about a million electrons in under a nanosecond. This animation slows that down and draws a few hundred. At low excess bias some photons fail to trigger, which is one reason photon detection efficiency rises with bias. Below breakdown the diode acts as an ordinary avalanche photodiode, and one photon gives a pulse too small to count.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="lab">
+    <h2>Image lab</h2>
+    <div class="body lab">
+      <p>A single-photon camera never records a grey level. Each frame is binary: a pixel either detected a photon or it did not. Brightness appears only when many frames are combined. The scene here is my portrait. Change the number of frames and the light level, or load your own photo to see it the way a SPAD array would.</p>
+      <figure>
+        <div class="sensor">
+          <div class="panes lab-panes">
+            <div>
+              <canvas id="lab-bin" width="120" height="160" role="img" aria-label="One binary single-photon frame of the portrait"></canvas>
+              <p class="cap">One binary frame</p>
+            </div>
+            <div>
+              <canvas id="lab-rec" width="120" height="160" role="img" aria-label="Portrait reconstructed from many binary frames"></canvas>
+              <p class="cap" id="lab-rec-cap">Estimate from 100 frames</p>
+            </div>
+          </div>
+          <div class="ctrl">
+            <label for="lab-frames">Frames <input type="range" id="lab-frames" min="0" max="30" step="1" value="20"><output id="lab-frames-o" for="lab-frames">100</output></label>
+            <label for="lab-flux">Light <input type="range" id="lab-flux" min="-20" max="10" step="1" value="-3"><output id="lab-flux-o" for="lab-flux">0.5 ph/px</output></label>
+            <label for="lab-color"><input type="checkbox" id="lab-color" checked> Colour filters</label>
+          </div>
+          <div class="ctrl">
+            <button type="button" id="lab-play" class="btn-main">Play accumulation</button>
+            <button type="button" id="lab-new">New frame</button>
+            <label class="file" for="lab-file">Use your photo<input type="file" id="lab-file" accept="image/*"></label>
+          </div>
+        </div>
+        <figcaption class="note">Light is the mean number of photons the brightest pixel receives per frame. A pixel receiving λ photons fires with probability 1 − e<sup>−λ</sup>. Counting detections over N frames and inverting that probability gives the maximum-likelihood estimate of λ, which recovers highlights that a single frame clips. Your photo is processed in your browser and never uploaded.</figcaption>
+      </figure>
+    </div>
+  </section>
 
   <section id="research">
     <h2>Research</h2>
@@ -502,6 +593,12 @@ footer { border-top: 1px solid var(--line); padding-top: 20px; font-family: var(
     { x: 0.88, y: 0.70, vx: -0.008, vy: -0.009, r: 0.30, a: 0.18 },
     { x: 0.55, y: 0.95, vx: 0.006, vy: -0.012, r: 0.20, a: 0.14 }
   ];
+  var ptr = { x: 0, y: 0, on: false };
+  window.addEventListener('pointermove', function (e) {
+    if (e.pointerType !== 'mouse') return;
+    ptr.x = e.clientX / W; ptr.y = e.clientY / H; ptr.on = true;
+  });
+  document.addEventListener('mouseout', function (e) { if (!e.relatedTarget) ptr.on = false; });
   function size() {
     var d = Math.min(window.devicePixelRatio || 1, 2);
     W = window.innerWidth; H = window.innerHeight;
@@ -527,6 +624,10 @@ footer { border-top: 1px solid var(--line); padding-top: 20px; font-family: var(
       }
       var px = (x + 0.5) * CELL;
       if (px > colL && px < colR) flux *= 0.25;       // keep the reading column quiet
+      if (ptr.on) {                                   // the cursor acts as a light source
+        var qx = (u - ptr.x) * asp, qy = v - ptr.y;
+        flux += 0.9 * Math.exp(-(qx * qx + qy * qy) / 0.004);
+      }
       lum[i] *= 0.80;
       if (Math.random() < 1 - Math.exp(-flux * 0.5)) lum[i] = 1;
     }
@@ -558,5 +659,529 @@ footer { border-top: 1px solid var(--line); padding-top: 20px; font-family: var(
   if (!document.hidden) run();
 })();
 </script>
-</body>
-</html>
+
+<script>
+(function () {
+  // SPAD cross-section. Light enters from the top: p+ anode, absorption region,
+  // high-field multiplication region, n+ cathode. Electrons drift down, holes up.
+  // Inside the multiplication region each carrier can impact-ionize and create a
+  // new electron-hole pair. Ionization strength scales as (V / V_BD)^7 and is set
+  // so the chain is exactly critical at V_BD. Current through the quench resistor
+  // pulls the bias down; the bias recharges toward the set point.
+  var cv = document.getElementById('spad-cv');
+  if (!cv || !cv.getContext) return;
+  var g = cv.getContext('2d');
+  var cs = getComputedStyle(document.documentElement);
+  function tok(n, f) { return cs.getPropertyValue(n).trim() || f; }
+  var C = {
+    e: tok('--accent', '#6FCBF2'), h: tok('--award', '#EBC064'), ph: tok('--photon', '#FFE7A3'),
+    ink: tok('--sensor-ink', '#C9D6E2'), dim: tok('--sensor-dim', '#6E7F90'), grid: tok('--sensor-grid', '#1C2834'),
+    bg: tok('--sensor', '#04070A'), metal: tok('--metal', '#8D9AA8'),
+    p: tok('--si-p', '#261F3B'), ab: tok('--si-abs', '#111B26'), mz: tok('--si-mz', '#0C2A40'), n: tok('--si-n', '#1A1D2C')
+  };
+  var MONO = '"IBM Plex Mono", ui-monospace, Menlo, monospace';
+  var VBD = 25, MAXP = 1400, KQ = 0.0002, RECHARGE = 0.014, THR = 100, HIST = 900;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var W = 0, H = 0, L = {};
+  var parts = [], photons = [], flashes = [];
+  var Vset = 27.5, V = Vset;
+  var histI = new Float32Array(HIST), histV = new Float32Array(HIST), histD = new Uint8Array(HIST), hp = 0;
+  var counts = 0, latched = false, pixelGlow = 0, stage = 'ready', auto = false, dark = false, triggered = false;
+
+  var el = {
+    status: document.getElementById('spad-status'), fire: document.getElementById('spad-fire'),
+    auto: document.getElementById('spad-auto'), bias: document.getElementById('spad-bias'),
+    biasO: document.getElementById('spad-bias-o'), dark: document.getElementById('spad-dark'),
+    mode: document.getElementById('spad-mode'), ex: document.getElementById('spad-ex'),
+    n: document.getElementById('spad-n'), c: document.getElementById('spad-c'),
+    steps: document.querySelectorAll('#spad-steps li')
+  };
+
+  function layout() {
+    var r = cv.getBoundingClientRect();
+    if (!r.width) return false;
+    var d = Math.min(window.devicePixelRatio || 1, 2);
+    W = r.width; H = r.height;
+    cv.width = Math.round(W * d); cv.height = Math.round(H * d);
+    g.setTransform(d, 0, 0, d, 0, 0);
+    L.narrow = W < 560;
+    if (L.narrow) {
+      L.dx = 6; L.dw = W - 12; L.dy = 64; L.dh = Math.round(H * 0.6) - 64;
+      L.sx = 6; L.sw = W - 12; L.sy = L.dy + L.dh + 26; L.sh = H - L.sy - 6;
+    } else {
+      L.dx = 6; L.dw = Math.round(W * 0.56); L.dy = 64; L.dh = H - 64 - 8;
+      L.sx = L.dx + L.dw + 64; L.sw = W - L.sx - 6; L.sy = 64; L.sh = H - 64 - 8;
+    }
+    L.pB = L.dy + L.dh * 0.10;
+    L.mT = L.dy + L.dh * 0.52;
+    L.mB = L.dy + L.dh * 0.70;
+    L.bot = L.dy + L.dh;
+    L.ve = Math.max(1.2, L.dh / 160);
+    L.vh = L.ve * 0.55;
+    return true;
+  }
+
+  // ---- simulation ----
+  function spawn(x, y) {
+    if (parts.length >= MAXP) return;
+    parts.push({ x: x + (Math.random() - 0.5) * 4, y: y, t: 0 }, { x: x + (Math.random() - 0.5) * 4, y: y, t: 1 });
+  }
+  function step() {
+    var gk = Math.pow(Math.max(V, 0) / VBD, 7), zone = L.mB - L.mT;
+    var pe = Math.min(0.5, 1.527 * gk * L.ve / zone), ph = Math.min(0.5, 0.611 * gk * L.vh / zone);
+    var x0 = L.dx + 3, x1 = L.dx + L.dw - 3;
+    for (var i = parts.length - 1; i >= 0; i--) {
+      var p = parts[i], inZone;
+      if (p.t === 0) {
+        p.y += p.y > L.mB ? L.ve * 1.5 : L.ve;
+        p.x += (Math.random() - 0.5) * 1.8;
+        inZone = p.y > L.mT && p.y < L.mB;
+        if (inZone && Math.random() < pe) spawn(p.x, p.y);
+        if (p.y > L.bot - 2) { parts[i] = parts[parts.length - 1]; parts.pop(); continue; }
+      } else {
+        p.y -= L.vh;
+        p.x += (Math.random() - 0.5) * 1.2;
+        inZone = p.y > L.mT && p.y < L.mB;
+        if (inZone && Math.random() < ph) spawn(p.x, p.y);
+        if (p.y < L.dy + 2) { parts[i] = parts[parts.length - 1]; parts.pop(); continue; }
+      }
+      if (p.x < x0) p.x = x0; else if (p.x > x1) p.x = x1;
+    }
+    V += (Vset - V) * RECHARGE - KQ * parts.length;
+  }
+  function stepPhotons() {
+    for (var i = photons.length - 1; i >= 0; i--) {
+      var q = photons[i];
+      q.y += L.ve * 3.2; q.t++;
+      if (q.y >= q.stop) { photons.splice(i, 1); absorb(q); }
+    }
+  }
+  function fire(x) {
+    if (x == null) x = L.dx + L.dw * (0.18 + Math.random() * 0.64);
+    // Absorption depth follows Beer-Lambert: exponential with a mean of 0.36 of the device depth.
+    var depth = -Math.log(1 - Math.random()) * 0.36 * L.dh;
+    photons.push({ x: x, y: L.dy - 30, t: 0, stop: Math.min(L.dy + depth, L.bot + 30) });
+    if (!parts.length && stage !== 'pair') setStage('photon', 'A photon is on its way into the pixel.');
+    armed = true; wake();
+  }
+  function absorb(q) {
+    var busy = parts.length > 0 || (Vset > VBD && V < VBD);
+    if (q.y < L.pB) {
+      flashes.push({ x: q.x, y: q.y, r: 2, a: 0.7, c: C.ph });
+      if (!busy) setStage('ready', 'The photon was absorbed in the thin p⁺ layer. The carriers recombine before reaching the high-field region, so nothing is counted.', true);
+      return;
+    }
+    if (q.y > L.bot) {
+      if (!busy) setStage('ready', 'The photon passed straight through the silicon without being absorbed. Missed photons like this lower the detection efficiency.', true);
+      return;
+    }
+    if (q.y > L.mB) {
+      flashes.push({ x: q.x, y: q.y, r: 2, a: 0.7, c: C.ph });
+      if (!busy) setStage('ready', 'The photon was absorbed below the junction, in the n⁺ cathode. Its carriers never reach the high-field region, so there is no avalanche and no count.', true);
+      return;
+    }
+    flashes.push({ x: q.x, y: q.y, r: 2, a: 1, c: C.ph });
+    spawn(q.x, q.y);
+    triggered = false;
+    if (busy) setStatus('Another photon arrived while the pixel was busy. During this dead time it cannot be counted.');
+    else setStage('pair', 'The photon is absorbed and frees one electron and one hole. The electron drifts down toward the high-field region.');
+  }
+  function darkEvent() {
+    var x = L.dx + L.dw * (0.1 + Math.random() * 0.8), y = L.pB + Math.random() * (L.mT - L.pB);
+    flashes.push({ x: x, y: y, r: 2, a: 0.8, c: C.dim });
+    spawn(x, y);
+    if (!parts.length || stage === 'ready') setStage('pair', 'Dark count: heat freed an electron with no photon involved. If it triggers an avalanche, the pixel cannot tell it from a real photon.');
+  }
+
+  function setStatus(msg) { if (el.status.textContent !== msg) el.status.textContent = msg; }
+  function setStage(s, msg, keep) {
+    stage = s;
+    for (var i = 0; i < el.steps.length; i++) el.steps[i].classList.toggle('on', el.steps[i].getAttribute('data-s') === s);
+    if (msg) setStatus(msg);
+    else if (s === 'ready' && !keep) setStatus(readyMsg());
+  }
+  function readyMsg() {
+    var ex = Vset - VBD;
+    if (ex > 0) return 'Ready. The diode is biased ' + ex.toFixed(1) + ' V above breakdown, waiting for a photon.';
+    if (ex === 0) return 'Biased exactly at breakdown. Avalanches start but rarely grow large enough to count.';
+    return 'Biased ' + (-ex).toFixed(1) + ' V below breakdown. The diode now works as an ordinary avalanche photodiode.';
+  }
+  function phaseUpdate() {
+    var I = parts.length;
+    if (I > THR && !latched) {
+      latched = true; counts++; pixelGlow = 1; triggered = true;
+      if (stage === 'pair' || stage === 'aval') setStage('aval', 'Avalanche. Each fast electron knocks loose new electron–hole pairs. The current crossed the threshold, so the pixel records a 1.');
+    } else if (I < THR * 0.3) latched = false;
+
+    if (stage === 'pair' && I > 12) {
+      setStage('aval', V >= VBD
+        ? 'Avalanche. Each fast electron knocks loose new electron–hole pairs, and above breakdown the chain keeps itself going.'
+        : 'Below breakdown the multiplication stays finite. The cloud of carriers grows a little, then dies out.');
+    }
+    if (stage === 'aval' && triggered && V < VBD) {
+      setStage('quench', 'Quench. Current through the resistor has pulled the bias below 25 V, so each carrier now creates less than one new pair and the avalanche dies out.');
+    }
+    if ((stage === 'pair' || stage === 'aval' || stage === 'quench') && I === 0) {
+      if (!triggered && Vset <= VBD) setStage('ready', 'The pulse died out below the counting threshold, so no count. Raise the bias above 25 V to detect single photons.', true);
+      else if (!triggered) setStage('ready', 'This time the avalanche died out before it grew. At low excess bias not every photon triggers, so raising the bias increases detection efficiency.', true);
+      else if (V < Vset - 0.15) setStage('recharge', 'Recharge. The bias climbs back above breakdown. Photons arriving now are missed. This is the dead time.');
+      else setStage('ready');
+    }
+    if (stage === 'recharge' && V >= Vset - 0.15) setStage('ready');
+  }
+  function record() {
+    histI[hp] = parts.length; histV[hp] = V; histD[hp] = latched ? 1 : 0;
+    hp = (hp + 1) % HIST;
+  }
+
+  // ---- drawing ----
+  function text(s, x, y, col, size, align) {
+    g.font = (size || 11) + 'px ' + MONO; g.fillStyle = col || C.ink; g.textAlign = align || 'left'; g.textBaseline = 'middle';
+    g.fillText(s, x, y);
+  }
+  function drawLegend() {
+    var y = 16, x = L.dx + 2;
+    g.fillStyle = C.e; g.beginPath(); g.arc(x + 4, y, 3, 0, 7); g.fill();
+    text('electron', x + 12, y);
+    x += 80;
+    g.strokeStyle = C.h; g.lineWidth = 1.3; g.beginPath(); g.arc(x + 4, y, 3, 0, 7); g.stroke();
+    text('hole', x + 12, y);
+    x += 52;
+    g.strokeStyle = C.ph; g.lineWidth = 1.4; g.beginPath();
+    for (var k = 0; k <= 12; k++) { var xx = x + k, yy = y + Math.sin(k * 1.1) * 3; k ? g.lineTo(xx, yy) : g.moveTo(xx, yy); }
+    g.stroke();
+    text('photon', x + 18, y);
+    if (!L.narrow) text('Click the device to send a photon', L.dx + L.dw, y, C.dim, 11, 'right');
+  }
+  function drawDevice() {
+    var x = L.dx, w = L.dw;
+    g.fillStyle = C.p; g.fillRect(x, L.dy, w, L.pB - L.dy);
+    g.fillStyle = C.ab; g.fillRect(x, L.pB, w, L.mT - L.pB);
+    g.fillStyle = C.mz; g.fillRect(x, L.mT, w, L.mB - L.mT);
+    g.fillStyle = C.n; g.fillRect(x, L.mB, w, L.bot - L.mB);
+    var heat = Math.min(1, parts.length / 500);
+    if (heat > 0) {
+      g.globalAlpha = 0.08 + heat * 0.3; g.fillStyle = C.e;
+      g.fillRect(x, L.mT, w, L.mB - L.mT); g.globalAlpha = 1;
+    }
+    g.fillStyle = C.dim; g.globalAlpha = 0.7; g.fillRect(x, Math.round(L.mB), w, 1); g.globalAlpha = 1;
+    // Electric field in the multiplication region points up, from n+ to p+.
+    g.strokeStyle = C.dim; g.globalAlpha = 0.35; g.lineWidth = 1;
+    for (var ax = x + 40; ax < x + w - 20; ax += 56) {
+      var y0 = L.mB - 6, y1 = L.mT + 8;
+      g.beginPath(); g.moveTo(ax, y0); g.lineTo(ax, y1); g.moveTo(ax - 3, y1 + 4); g.lineTo(ax, y1); g.lineTo(ax + 3, y1 + 4); g.stroke();
+    }
+    g.globalAlpha = 1;
+    // Contacts: a ring electrode on top leaves the window open to light; full metal at the bottom.
+    g.fillStyle = C.metal;
+    g.fillRect(x, L.dy - 4, w * 0.12, 4); g.fillRect(x + w * 0.88, L.dy - 4, w * 0.12, 4);
+    g.fillRect(x, L.bot - 3, w, 3);
+    var lx = x + 8, sz = L.narrow ? 10 : 11;
+    text('p⁺ anode', lx, (L.dy + L.pB) / 2, C.ink, sz);
+    text('absorption region', lx, L.pB + 14, C.ink, sz);
+    text('multiplication region', lx, L.mT + 13, C.ink, sz);
+    text('E ≈ 5×10⁵ V/cm', x + w - 8, L.mT + 13, C.dim, sz, 'right');
+    text('n⁺ cathode', lx, L.mB + 14, C.ink, sz);
+    text('to +V bias', x + w - 8, L.bot - 13, C.dim, sz, 'right');
+  }
+  function drawParticles() {
+    g.globalCompositeOperation = 'lighter';
+    g.fillStyle = C.e;
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      if (p.t) continue;
+      g.globalAlpha = 0.18; g.beginPath(); g.arc(p.x, p.y, 4, 0, 7); g.fill();
+      g.globalAlpha = 0.95; g.beginPath(); g.arc(p.x, p.y, 1.5, 0, 7); g.fill();
+    }
+    g.globalCompositeOperation = 'source-over';
+    g.strokeStyle = C.h; g.lineWidth = 1.1; g.globalAlpha = 0.85;
+    g.beginPath();
+    for (var j = 0; j < parts.length; j++) {
+      var h = parts[j];
+      if (!h.t) continue;
+      g.moveTo(h.x + 2, h.y); g.arc(h.x, h.y, 2, 0, 7);
+    }
+    g.stroke();
+    g.globalAlpha = 1;
+  }
+  function drawPhotons() {
+    for (var i = 0; i < photons.length; i++) {
+      var q = photons[i];
+      g.strokeStyle = C.ph; g.lineWidth = 1.6; g.beginPath();
+      for (var k = 0; k <= 40; k++) {
+        var t = k / 40, yy = q.y - 50 + t * 50, env = Math.sin(Math.PI * t);
+        var xx = q.x + Math.sin((yy - q.y) * 0.5 - q.t * 0.9) * 5 * env;
+        k ? g.lineTo(xx, yy) : g.moveTo(xx, yy);
+      }
+      g.stroke();
+      g.fillStyle = C.ph; g.globalAlpha = 0.35; g.beginPath(); g.arc(q.x, q.y, 6, 0, 7); g.fill();
+      g.globalAlpha = 1; g.beginPath(); g.arc(q.x, q.y, 2.2, 0, 7); g.fill();
+      if (q.y < L.dy) text('hν', q.x + 12, q.y - 24, C.ph, 12);
+    }
+    for (var f = flashes.length - 1; f >= 0; f--) {
+      var fl = flashes[f];
+      g.strokeStyle = fl.c; g.globalAlpha = fl.a; g.lineWidth = 1.5;
+      g.beginPath(); g.arc(fl.x, fl.y, fl.r, 0, 7); g.stroke();
+      fl.r += 1.2; fl.a -= 0.03;
+      if (fl.a <= 0) flashes.splice(f, 1);
+    }
+    g.globalAlpha = 1;
+  }
+  function drawWire() {
+    var y = (L.dy + L.pB) / 2, x0 = L.dx + L.dw, x1 = L.sx - 6, mid = (x0 + x1) / 2;
+    var heat = Math.min(1, parts.length / 300);
+    g.strokeStyle = heat > 0.02 ? C.e : C.metal; g.globalAlpha = 0.5 + heat * 0.5; g.lineWidth = 1.3;
+    g.beginPath(); g.moveTo(x0, y); g.lineTo(mid - 12, y);
+    for (var k = 0; k < 6; k++) g.lineTo(mid - 12 + k * 4 + 2, y + (k % 2 ? 5 : -5));
+    g.lineTo(mid + 12, y); g.lineTo(x1, y); g.stroke();
+    g.globalAlpha = 1;
+    text('R', mid - 4, y - 14, C.ink, 11, 'center');
+    text('q', mid + 3, y - 10, C.ink, 9, 'center');
+  }
+  function drawScope() {
+    var x = L.sx, y = L.sy, w = L.sw, h = L.sh;
+    g.strokeStyle = C.grid; g.lineWidth = 1; g.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
+    for (var gx = 1; gx < 6; gx++) { g.fillStyle = C.grid; g.fillRect(Math.round(x + gx * w / 6), y + 1, 1, h - 2); }
+    text('Readout', x, y - 14, C.ink, 11);
+    text('time →', x + w, y - 14, C.dim, 11, 'right');
+    var gap = 8, top = y + 6, avail = h - 12 - gap * 2;
+    var lanes = [
+      { y: top, h: avail * 0.34 },
+      { y: top + avail * 0.34 + gap, h: avail * 0.44 },
+      { y: top + avail * 0.78 + gap * 2, h: avail * 0.22 }
+    ];
+    var n = Math.min(HIST, Math.floor(w - 4)), x0 = x + w - 2 - n;
+    function sample(arr, k) { return arr[(hp - n + k + HIST * 2) % HIST]; }
+
+    // Lane 1: diode bias
+    var a = lanes[0], vmin = 17, vmax = 31;
+    function vy(v) { return a.y + a.h - (Math.max(vmin, Math.min(vmax, v)) - vmin) / (vmax - vmin) * a.h; }
+    g.strokeStyle = C.h; g.globalAlpha = 0.6; g.setLineDash([3, 3]);
+    g.beginPath(); g.moveTo(x + 2, vy(VBD)); g.lineTo(x + w - 2, vy(VBD)); g.stroke(); g.setLineDash([]); g.globalAlpha = 1;
+    text('breakdown 25 V', x + w - 6, vy(VBD) + 9, C.h, 10, 'right');
+    g.strokeStyle = C.ink; g.lineWidth = 1.4; g.beginPath();
+    for (var k = 0; k < n; k++) { var yy = vy(sample(histV, k)); k ? g.lineTo(x0 + k, yy) : g.moveTo(x0 + k, yy); }
+    g.stroke();
+    text('diode bias  ' + V.toFixed(1) + ' V', x + 6, a.y + 8, C.ink, 10);
+
+    // Lane 2: avalanche current
+    var b = lanes[1], imax = 900;
+    function iy(v) { return b.y + b.h - Math.min(1, v / imax) * b.h; }
+    g.strokeStyle = C.dim; g.globalAlpha = 0.6; g.setLineDash([3, 3]);
+    g.beginPath(); g.moveTo(x + 2, iy(THR)); g.lineTo(x + w - 2, iy(THR)); g.stroke(); g.setLineDash([]); g.globalAlpha = 1;
+    text('count threshold', x + w - 6, iy(THR) - 8, C.dim, 10, 'right');
+    g.beginPath(); g.moveTo(x0, b.y + b.h);
+    for (var k2 = 0; k2 < n; k2++) g.lineTo(x0 + k2, iy(sample(histI, k2)));
+    g.lineTo(x0 + n, b.y + b.h); g.closePath();
+    g.fillStyle = C.e; g.globalAlpha = 0.22; g.fill(); g.globalAlpha = 1;
+    g.strokeStyle = C.e; g.lineWidth = 1.4; g.beginPath();
+    for (var k3 = 0; k3 < n; k3++) { var y3 = iy(sample(histI, k3)); k3 ? g.lineTo(x0 + k3, y3) : g.moveTo(x0 + k3, y3); }
+    g.stroke();
+    text('avalanche current', x + 6, b.y + 8, C.e, 10);
+
+    // Lane 3: digital pixel output
+    var c = lanes[2];
+    g.strokeStyle = C.ph; g.lineWidth = 1.4; g.beginPath();
+    for (var k4 = 0; k4 < n; k4++) { var y4 = c.y + c.h - 3 - sample(histD, k4) * (c.h - 14); k4 ? g.lineTo(x0 + k4, y4) : g.moveTo(x0 + k4, y4); }
+    g.stroke();
+    text('pixel output', x + 6, c.y + 6, C.ph, 10);
+    var px = x + w - 20, py = c.y + 2;
+    g.strokeStyle = C.ph; g.lineWidth = 1; g.strokeRect(px + 0.5, py + 0.5, 13, 13);
+    if (pixelGlow > 0) { g.fillStyle = C.ph; g.globalAlpha = pixelGlow; g.fillRect(px + 2, py + 2, 10, 10); g.globalAlpha = 1; }
+    text(String(counts), px - 6, py + 7, C.ph, 11, 'right');
+  }
+  function draw() {
+    g.clearRect(0, 0, W, H);
+    drawLegend(); drawDevice(); drawParticles(); drawPhotons();
+    if (!L.narrow) drawWire();
+    drawScope();
+  }
+  function readouts() {
+    var ex = Vset - VBD;
+    el.mode.textContent = ex > 0 ? 'Geiger' : 'linear';
+    el.ex.textContent = (ex > 0 ? '+' : ex < 0 ? '−' : '') + Math.abs(ex).toFixed(1) + ' V';
+    el.n.textContent = parts.length;
+    el.c.textContent = counts;
+  }
+
+  // ---- loop ----
+  var raf = 0, visible = true, frame = 0;
+  function tick() {
+    if (auto && Math.random() < 0.016) fire();
+    if (dark && Math.random() < 0.004) darkEvent();
+    for (var s = 0; s < 2; s++) { stepPhotons(); step(); }
+    if (pixelGlow > 0) pixelGlow = Math.max(0, pixelGlow - 0.02);
+    record(); phaseUpdate();
+  }
+  function loop() {
+    raf = 0;
+    tick(); draw();
+    if (++frame % 3 === 0) readouts();
+    wake();
+  }
+  function busy() { return parts.length || photons.length || flashes.length || stage !== 'ready' || Math.abs(V - Vset) > 0.05 || auto || dark; }
+  var armed = !reduce;   // with reduced motion, animate only after the viewer asks
+  function wake() {
+    if (raf || document.hidden || !visible || !armed) return;
+    if (reduce && !busy()) { readouts(); return; }
+    raf = requestAnimationFrame(loop);
+  }
+
+  // ---- controls ----
+  el.fire.addEventListener('click', function () { fire(); });
+  cv.addEventListener('click', function (e) {
+    var r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+    if (x > L.dx && x < L.dx + L.dw && y < L.bot) fire(Math.max(L.dx + 10, Math.min(L.dx + L.dw - 10, x)));
+  });
+  el.auto.addEventListener('click', function () {
+    auto = !auto;
+    el.auto.setAttribute('aria-pressed', auto ? 'true' : 'false');
+    el.auto.textContent = 'Steady light: ' + (auto ? 'on' : 'off');
+    armed = true; wake();
+  });
+  el.bias.addEventListener('input', function () {
+    Vset = parseFloat(el.bias.value);
+    el.biasO.textContent = Vset.toFixed(1) + ' V';
+    readouts();
+    if (stage === 'ready') setStage('ready');
+    armed = true; wake();
+  });
+  el.dark.addEventListener('change', function () { dark = el.dark.checked; armed = true; wake(); });
+
+  // ---- start: show an avalanche already in progress so the first view tells the story ----
+  function prewarm() {
+    for (var h = 0; h < HIST; h++) { histV[h] = Vset; }
+    for (var attempt = 0; attempt < 8 && parts.length < 150; attempt++) {
+      parts.length = 0; V = Vset;
+      spawn(L.dx + L.dw * 0.5, L.pB + (L.mT - L.pB) * 0.7);
+      stage = 'pair';
+      for (var k = 0; k < 400 && parts.length > 0 && parts.length < 260; k++) { step(); record(); }
+    }
+    if (parts.length) { phaseUpdate(); setStage(stage === 'pair' ? 'aval' : stage, 'Avalanche. Each fast electron knocks loose new electron–hole pairs, and above breakdown the chain keeps itself going.'); }
+    else setStage('ready');
+  }
+  if (!layout()) return;
+  prewarm(); draw(); readouts();
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (en) { visible = en[0].isIntersecting; wake(); }).observe(cv);
+  }
+  document.addEventListener('visibilitychange', wake);
+  var lastW = W;
+  window.addEventListener('resize', function () {
+    var r = cv.getBoundingClientRect();
+    if (Math.abs(r.width - lastW) < 1 && Math.abs(r.height - H) < 1) return;
+    lastW = r.width; parts.length = 0; photons.length = 0; flashes.length = 0;
+    layout(); setStage('ready'); draw(); wake();
+  });
+  wake();
+})();
+</script>
+
+<script>
+(function () {
+  // Image lab: treat the portrait (or the viewer's photo) as a scene of linear
+  // radiance and simulate binary SPAD frames. Each pixel and colour channel fires
+  // with p = 1 - exp(-lambda). The N-frame sum is binomial; above 40 frames it is
+  // drawn from the normal approximation to keep slider updates instant.
+  var bin = document.getElementById('lab-bin'), rec = document.getElementById('lab-rec');
+  var src = document.querySelector('.portrait');
+  if (!bin || !rec || !bin.getContext || !src) return;
+  var el = {
+    frames: document.getElementById('lab-frames'), framesO: document.getElementById('lab-frames-o'),
+    flux: document.getElementById('lab-flux'), fluxO: document.getElementById('lab-flux-o'),
+    color: document.getElementById('lab-color'), play: document.getElementById('lab-play'),
+    fresh: document.getElementById('lab-new'), file: document.getElementById('lab-file'),
+    cap: document.getElementById('lab-rec-cap')
+  };
+  var bx = bin.getContext('2d'), rx = rec.getContext('2d');
+  var w = 0, h = 0, lin = null, bImg = null, rImg = null;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function frames() { return Math.round(Math.pow(10, el.frames.value / 10)); }
+  function level() { return Math.pow(10, el.flux.value / 10); }
+  function gauss() { var u = 1 - Math.random(), v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(6.2832 * v); }
+  function binom(n, p) {
+    if (n <= 40) { var s = 0; for (var i = 0; i < n; i++) if (Math.random() < p) s++; return s; }
+    var m = n * p, k = Math.round(m + Math.sqrt(m * (1 - p)) * gauss());
+    return k < 0 ? 0 : k > n ? n : k;
+  }
+
+  function load(img) {
+    var iw = img.naturalWidth, ih = img.naturalHeight;
+    if (!iw || !ih) return;
+    var MAX = 160;
+    if (iw >= ih) { w = MAX; h = Math.max(1, Math.round(ih / iw * MAX)); }
+    else { h = MAX; w = Math.max(1, Math.round(iw / ih * MAX)); }
+    var work = document.createElement('canvas'); work.width = w; work.height = h;
+    var wx = work.getContext('2d'); wx.drawImage(img, 0, 0, w, h);
+    var d = wx.getImageData(0, 0, w, h).data;
+    lin = new Float32Array(w * h * 3);
+    for (var i = 0, j = 0; i < w * h; i++, j += 4) {
+      lin[i * 3] = Math.pow(d[j] / 255, 2.2);
+      lin[i * 3 + 1] = Math.pow(d[j + 1] / 255, 2.2);
+      lin[i * 3 + 2] = Math.pow(d[j + 2] / 255, 2.2);
+    }
+    bin.width = rec.width = w; bin.height = rec.height = h;
+    bImg = bx.createImageData(w, h); rImg = rx.createImageData(w, h);
+    render();
+  }
+
+  function render() {
+    if (!lin) return;
+    var N = frames(), lam = level(), colour = el.color.checked;
+    var b = bImg.data, r = rImg.data, n = w * h;
+    for (var i = 0, j = 0; i < n; i++, j += 4) {
+      var R = lin[i * 3], G = lin[i * 3 + 1], B = lin[i * 3 + 2];
+      var ch = colour ? [R, G, B] : [0.2126 * R + 0.7152 * G + 0.0722 * B];
+      for (var c = 0; c < ch.length; c++) {
+        var p = 1 - Math.exp(-lam * ch[c]);
+        var one = Math.random() < p ? 255 : 0;
+        var S = binom(N, p), ph = S / N;
+        if (ph >= 1) ph = 1 - 0.5 / N;
+        var est = -Math.log(1 - ph) / lam;                       // ML estimate of radiance
+        var v = Math.pow(Math.min(1, est), 1 / 2.2) * 255;
+        if (colour) { b[j + c] = one; r[j + c] = v; }
+        else { b[j] = b[j + 1] = b[j + 2] = one; r[j] = r[j + 1] = r[j + 2] = v; }
+      }
+      b[j + 3] = r[j + 3] = 255;
+    }
+    bx.putImageData(bImg, 0, 0); rx.putImageData(rImg, 0, 0);
+    el.framesO.textContent = N.toLocaleString('en-US');
+    var l = lam < 0.1 ? lam.toFixed(2) : lam < 1 ? lam.toFixed(1) : lam.toFixed(lam < 10 ? 1 : 0);
+    el.fluxO.textContent = l + ' ph/px';
+    el.cap.textContent = N === 1 ? 'Estimate from 1 frame' : 'Estimate from ' + N.toLocaleString('en-US') + ' frames';
+  }
+
+  var playTimer = null;
+  function stopPlay() { clearInterval(playTimer); playTimer = null; el.play.textContent = 'Play accumulation'; }
+  el.play.addEventListener('click', function () {
+    if (playTimer) { stopPlay(); return; }
+    if (reduce) { el.frames.value = 30; render(); return; }
+    el.frames.value = 0; render();
+    el.play.textContent = 'Stop';
+    playTimer = setInterval(function () {
+      var v = +el.frames.value + 1;
+      el.frames.value = v; render();
+      if (v >= 30) stopPlay();
+    }, 160);
+  });
+  el.frames.addEventListener('input', function () { if (playTimer) stopPlay(); render(); });
+  el.flux.addEventListener('input', render);
+  el.color.addEventListener('change', render);
+  el.fresh.addEventListener('click', render);
+  el.file.addEventListener('change', function () {
+    var f = el.file.files && el.file.files[0];
+    if (!f) return;
+    var url = URL.createObjectURL(f), img = new Image();
+    img.onload = function () { load(img); URL.revokeObjectURL(url); };
+    img.src = url;
+  });
+
+  if (src.complete && src.naturalWidth) load(src);
+  else src.addEventListener('load', function () { load(src); });
+})();
+</script>
+
+</body></html>
