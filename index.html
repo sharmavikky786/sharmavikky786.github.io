@@ -180,6 +180,16 @@ footer { border-top: 1px solid var(--line); padding-top: 20px; font-family: var(
 .file input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 .lab-panes canvas { aspect-ratio: auto; height: auto; }
 @media (max-width: 600px) { #spad-cv { aspect-ratio: 9 / 16; } }
+/* A real SPAD sensor photo, shown on white as published */
+.chip { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 18px 28px; align-items: center; }
+.chip .ph { background: #FFFFFF; border: 1px solid var(--line); border-radius: 4px; padding: 10px; }
+.chip .ph img { display: block; width: 100%; height: auto; }
+.chip h3 { font-family: var(--display); font-weight: 700; font-size: 21px; line-height: 1.22; letter-spacing: -0.012em; margin-bottom: 8px; }
+.chip p { font-size: 15.5px; color: var(--muted); }
+.chip p + p { margin-top: 10px; }
+.ref { font-size: 13.5px; color: var(--muted); border-left: 2px solid var(--line); padding-left: 12px; }
+.ref a { overflow-wrap: anywhere; }
+@media (max-width: 820px) { .chip { grid-template-columns: minmax(0, 1fr); } }
 
 @media (max-width: 820px) {
   .hero { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-block: 36px 44px; }
@@ -254,6 +264,14 @@ footer { border-top: 1px solid var(--line); padding-top: 20px; font-family: var(
     <h2>Inside a pixel</h2>
     <div class="body lab">
       <p>Every pixel of a single-photon camera is a SPAD, a single-photon avalanche diode biased above its breakdown voltage. Here, light from a scene streams through a lens onto a row of SPAD pixels. Each photon that lands can set off an avalanche, a flood of electrons large enough to count. Brighter parts of the scene send more photons, so their pixels fire more often. Click any pixel to follow it step by step.</p>
+      <figure class="chip">
+        <div class="ph"><img src="img/spad-chip.jpg" width="1169" height="784" loading="lazy" alt="Microscope photo of a square SPAD image sensor chip, 11 mm on each side, with two dark green pixel arrays of 1024 × 500 pixels. Magnified insets show 4 × 4 groups of pixels, each with a small round avalanche diode."></div>
+        <figcaption>
+          <h3>What a real SPAD sensor looks like</h3>
+          <p>This is a megapixel SPAD image sensor, one of the first single-photon cameras with a million pixels. The 11 mm chip holds two arrays of 1024 × 500 pixels at a 9.4 µm pitch. In the magnified views, each round spot is one avalanche diode, the device animated below, with its own quenching and recharge circuit around it.</p>
+          <p class="ref">Image: Fig. 3(b) from K. Morimoto, A. Ardelean, M.-L. Wu, A. C. Ulku, I. M. Antolovic, C. Bruschini and E. Charbon, "Megapixel time-gated SPAD image sensor for 2D and 3D imaging applications," <i>Optica</i> 7(4), 346 (2020). <a href="https://doi.org/10.1364/OPTICA.386574">doi.org/10.1364/OPTICA.386574</a>. © 2020 Optical Society of America, reused under the OSA Open Access Publishing Agreement. Cropped to the chip photo.</p>
+        </figcaption>
+      </figure>
       <figure>
         <div class="sensor">
           <canvas id="spad-cv" role="img" aria-label="Animated cross-section of a row of SPAD pixels under a scene. Photons stream down through a lens, each absorbed photon frees an electron, and the electron multiplies into an avalanche flood that is then quenched and recharged. A count band under the pixels builds up an image of the scene. Beside it, a scope follows one pixel's bias, current and output, and a raster shows the binary frames of every pixel."></canvas>
