@@ -116,6 +116,11 @@ h2 { font-family: var(--mono); font-weight: 500; font-size: 13px; letter-spacing
 .pub .au b { font-weight: 600; color: var(--ink); }
 .pub .ven { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 6px; font-family: var(--mono); font-size: 13px; }
 .pub .ven .aw { color: var(--award); }
+.pub .ven a { color: var(--muted); text-decoration-color: var(--line); }
+.pub .ven a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+.pub .ven a.proj { color: var(--accent); border: 1px solid var(--accent); border-radius: 3px; padding: 0 8px; text-decoration: none; }
+.pub .ven a.proj::after { content: " →"; }
+.pub .ven a.proj:hover { background: var(--accent); color: var(--bg); }
 
 /* Timeline rows */
 .rows { display: grid; gap: 30px; }
@@ -338,25 +343,25 @@ footer { border-top: 1px solid var(--line); padding-top: 20px; font-family: var(
         <li class="pub">
           <span class="yr">2025</span>
           <div>
-            <h3><a href="https://ieeexplore.ieee.org/document/11084316">SPC to 3D: Novel View Synthesis via I2I Translation Networks</a></h3>
+            <h3><a href="projects/spc-3d.html">SPC to 3D: Novel View Synthesis via I2I Translation Networks</a></h3>
             <p class="au"><b>S. Sharma</b>, G.R. Matta, K. Mitra</p>
-            <p class="ven"><span>ICIP 2025</span></p>
+            <p class="ven"><span>ICIP 2025</span><a class="proj" href="projects/spc-3d.html">Project page</a><a href="https://ieeexplore.ieee.org/document/11084316">IEEE</a><a href="https://arxiv.org/abs/2506.06890">arXiv</a></p>
           </div>
         </li>
         <li class="pub">
           <span class="yr">2025</span>
           <div>
-            <h3><a href="https://arxiv.org/pdf/2510.07879">Light Field Super-Resolution: A Critical Review on Challenges and Opportunities</a></h3>
+            <h3><a href="projects/lf-sr-review.html">Light Field Super-Resolution: A Critical Review on Challenges and Opportunities</a></h3>
             <p class="au"><b>S. Sharma</b></p>
-            <p class="ven"><span>arXiv:2510.07879</span></p>
+            <p class="ven"><span>arXiv:2510.07879</span><a class="proj" href="projects/lf-sr-review.html">Project page</a><a href="https://arxiv.org/pdf/2510.07879">PDF</a></p>
           </div>
         </li>
         <li class="pub">
           <span class="yr">2024</span>
           <div>
-            <h3><a href="https://www.springerprofessional.de/en/transforming-single-photon-camera-images-to-color-high-dynamic-r/51316516">Transforming Single Photon Camera Images to Color HDR Images</a></h3>
+            <h3><a href="projects/spc-hdr.html">Transforming Single Photon Camera Images to Color HDR Images</a></h3>
             <p class="au"><b>S. Sharma</b>, G. Rongali, K. Mitra</p>
-            <p class="ven"><span>CVIP 2024</span><span class="aw">Best IAPR Paper Award</span></p>
+            <p class="ven"><span>CVIP 2024</span><span class="aw">Best IAPR Paper Award</span><a class="proj" href="projects/spc-hdr.html">Project page</a><a href="https://doi.org/10.1007/978-3-031-93709-5_10">Springer</a><a href="https://arxiv.org/abs/2412.12942">arXiv</a></p>
           </div>
         </li>
         <li class="pub">

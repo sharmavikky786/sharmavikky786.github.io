@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>SPC to Colour HDR</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: same system as the homepage. A paper header, then two-track sections
+   (label rail + content). Figures sit on the near-black sensor ground. */
+:root {
+  --bg: #080D13;
+  --surface: #131D28;
+  --ink: #F1F5F9;
+  --muted: #B3C0CD;
+  --dim: #6E7F90;
+  --line: #2A3846;
+  --grid: #1C2834;
+  --accent: #6FCBF2;
+  --award: #EBC064;
+  --photon: #FFE7A3;
+  --sensor: #04070A;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+h1, h2, h3, p, ul, ol, figure, pre { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+.wrap { max-width: 1080px; margin-inline: auto; padding-inline: clamp(16px, 4vw, 44px); padding-block: 0 72px; }
+
+.top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 20px; padding-block: 20px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 13px; }
+.top a { color: var(--muted); text-decoration: none; }
+.top a:hover { color: var(--accent); }
+
+.paper { display: grid; gap: 18px; padding-block: 48px 44px; }
+.kicker { display: flex; flex-wrap: wrap; gap: 4px 18px; font-family: var(--mono); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.kicker .aw { color: var(--award); }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(32px, 5.2vw, 58px); line-height: 1.02; letter-spacing: -0.03em; max-width: 19em; text-wrap: balance; }
+.authors { font-size: 19px; }
+.authors b { font-weight: 600; }
+.aff { font-family: var(--mono); font-size: 13px; color: var(--muted); margin-top: -10px; }
+.links { display: flex; flex-wrap: wrap; gap: 10px; }
+.links a { font-family: var(--mono); font-size: 13px; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 3px; padding: 6px 14px; text-decoration: none; }
+.links a:hover { border-color: var(--accent); color: var(--accent); }
+.tldr { font-size: 20px; line-height: 1.5; max-width: 36em; }
+
+section { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 16px 40px; padding-block: 40px; border-top: 1px solid var(--line); }
+h2 { font-family: var(--mono); font-weight: 500; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding-top: 4px; }
+.body { min-width: 0; display: grid; gap: 18px; align-content: start; }
+.body > p { max-width: 40em; }
+h3 { font-family: var(--display); font-weight: 700; font-size: 21px; line-height: 1.22; letter-spacing: -0.012em; text-wrap: balance; }
+
+.fig { background: var(--sensor); border-radius: 4px; padding: 16px; min-width: 0; }
+.cap { font-size: 14px; color: var(--muted); max-width: 46em; }
+.ctrl { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.ctrl label { display: inline-flex; align-items: center; gap: 8px; }
+.ctrl input[type="range"] { width: 150px; max-width: 42vw; accent-color: var(--accent); }
+.ctrl output { color: var(--ink); font-variant-numeric: tabular-nums; min-width: 5.5em; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
+.seg button { font: 12px var(--mono); background: transparent; color: var(--muted); border: 0; padding: 5px 12px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--sensor); }
+.read { display: flex; flex-wrap: wrap; gap: 6px 22px; font-family: var(--mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.read b { color: var(--ink); font-weight: 500; }
+canvas.chart { display: block; width: 100%; max-width: 100%; aspect-ratio: 16 / 8; }
+@media (max-width: 600px) { canvas.chart { aspect-ratio: 4 / 3.4; } }
+
+.pipe { display: flex; flex-wrap: wrap; align-items: stretch; gap: 10px; }
+.stage { flex: 1 1 190px; min-width: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 14px 16px; display: grid; gap: 6px; align-content: start; }
+.stage .k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.stage h3 { font-size: 18px; }
+.stage p { font-size: 14.5px; color: var(--muted); }
+.arrow { align-self: center; font-family: var(--mono); color: var(--dim); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-family: var(--mono); font-size: 12px; border: 1px solid var(--line); border-radius: 999px; padding: 1px 10px; color: var(--ink); }
+.chip.win { border-color: var(--accent); color: var(--accent); }
+.alt { border-style: dashed; }
+
+.math { font-family: var(--mono); font-size: 15px; background: var(--sensor); color: var(--ink); padding: 14px 18px; border-radius: 4px; overflow-x: auto; white-space: nowrap; display: grid; gap: 6px; }
+.math .note { color: var(--dim); font-size: 12.5px; white-space: normal; }
+.kv { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 8px 24px; font-size: 15.5px; }
+.kv dt { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 2px; }
+.kv dd { margin: 0; }
+
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; font-variant-numeric: tabular-nums; }
+th, td { text-align: right; padding: 8px 12px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { font-family: var(--mono); font-size: 11.5px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+td.best { color: var(--accent); font-weight: 600; }
+tbody tr:hover td { background: var(--surface); }
+
+.bars { display: grid; gap: 6px; }
+.bar { display: grid; grid-template-columns: minmax(150px, 210px) minmax(0, 1fr) 54px; gap: 12px; align-items: center; font-size: 14px; }
+.bar .lab { font-family: var(--mono); font-size: 12.5px; color: var(--muted); overflow-wrap: anywhere; }
+.bar .track { height: 14px; background: var(--grid); border-radius: 2px; overflow: hidden; }
+.bar .fill { height: 100%; background: var(--line); transition: width .35s ease; }
+.bar .val { font-variant-numeric: tabular-nums; text-align: right; }
+.bar.top .fill { background: var(--accent); }
+.bar.top .lab, .bar.top .val { color: var(--accent); }
+.bar.single .fill { background: var(--photon); }
+.bar.single .lab { color: var(--photon); }
+
+.list { display: grid; gap: 10px; max-width: 42em; }
+.list li { position: relative; padding-left: 20px; }
+.list li::before { content: ""; position: absolute; left: 0; top: 0.75em; width: 9px; height: 1px; background: var(--accent); }
+
+pre.bib { background: var(--sensor); border: 1px solid var(--line); border-radius: 4px; padding: 16px; overflow-x: auto; font: 13px/1.55 var(--mono); color: var(--ink); white-space: pre; }
+.copy { font-family: var(--mono); font-size: 12px; color: var(--accent); background: var(--surface); border: 1px solid var(--line); border-radius: 3px; padding: 4px 12px; cursor: pointer; justify-self: start; }
+.copy:hover { border-color: var(--accent); }
+footer { border-top: 1px solid var(--line); padding-top: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+/* Figures from the papers sit on white, as published, and open in a full-screen viewer. */
+.paperfig { display: grid; gap: 8px; min-width: 0; }
+.zoom { display: block; width: 100%; padding: 10px; background: #FFFFFF; border: 1px solid var(--line); border-radius: 4px; cursor: zoom-in; }
+.zoom:hover { border-color: var(--accent); }
+.zoom img { display: block; width: 100%; height: auto; }
+.paperfig.narrow { max-width: 560px; }
+.figcap { font-size: 14px; color: var(--muted); max-width: 46em; }
+.figcap b { font-family: var(--mono); font-size: 11.5px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink); margin-right: 6px; }
+.lightbox { position: fixed; inset: 0; z-index: 50; background: rgba(4, 7, 10, 0.95); display: grid; grid-template-rows: auto minmax(0, 1fr); padding: calc(env(safe-area-inset-top, 0px) + 12px) 12px calc(env(safe-area-inset-bottom, 0px) + 12px); }
+.lightbox .lbbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 14px; padding-bottom: 10px; font: 12px var(--mono); color: var(--muted); }
+.lightbox .lbbar span { flex: 1 1 200px; min-width: 0; }
+.lightbox .lbbar button { font: 12px var(--mono); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 3px; padding: 5px 12px; cursor: pointer; }
+.lightbox .lbbar button:hover { border-color: var(--accent); color: var(--accent); }
+.lightbox .lbscroll { overflow: auto; background: #FFFFFF; border-radius: 4px; }
+.lightbox img { display: block; max-width: none; height: auto; }
+.lightbox img.fit { max-width: 100%; margin-inline: auto; }
+@media (max-width: 820px) {
+  section { grid-template-columns: minmax(0, 1fr); padding-block: 32px; }
+  .kv { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .kv dd { margin-bottom: 10px; }
+}
+@media (max-width: 520px) {
+  body { font-size: 16px; }
+  .bar { grid-template-columns: minmax(0, 1fr) 50px; }
+  .bar .lab { grid-column: 1 / -1; }
+  .arrow { display: none; }
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <nav class="top" aria-label="Site">
+    <a href="../">← Sumit Sharma</a>
+    <span>
+      <a href="#method">Method</a> ·
+      <a href="#results">Results</a> ·
+      <a href="#bibtex">BibTeX</a>
+    </span>
+  </nav>
+
+  <header class="paper">
+    <p class="kicker"><span>CVIP 2024</span><span class="aw">Best IAPR Paper Award</span></p>
+    <h1>Transforming Single Photon Camera Images to Color High Dynamic Range Images</h1>
+    <p class="authors"><b>Sumit Sharma</b>, Girish Rongali, Kaushik Mitra</p>
+    <p class="aff">Indian Institute of Technology Madras, Chennai, India</p>
+    <div class="links">
+      <a href="https://doi.org/10.1007/978-3-031-93709-5_10">Springer chapter</a>
+      <a href="https://arxiv.org/abs/2412.12942">arXiv 2412.12942</a>
+      <a href="https://arxiv.org/pdf/2412.12942">PDF</a>
+      <a href="#bibtex">BibTeX</a>
+    </div>
+    <p class="tldr">A single-photon camera captures very dark and very bright scenes without ghosting, but its images are noisy and monochrome. We test which networks turn them into colour HDR images. Pix2PixHD is best for colour and DeepHDR is best for HDR.</p>
+  </header>
+
+  <section id="why">
+    <h2>Why SPADs see HDR</h2>
+    <div class="body">
+      <p>A conventional pixel collects charge until its well is full, then clips. A SPAD counts photons one at a time, and after each detection it is blind for a short dead time. As light gets brighter, the count rate approaches one per dead time but never hits a hard ceiling. This soft saturation gives SPADs their wide dynamic range.</p>
+      <figure class="fig">
+        <canvas class="chart" id="resp" role="img" aria-label="Response of a conventional pixel and a SPAD pixel against photon flux on a log axis. The conventional pixel rises linearly and clips; the SPAD pixel saturates gradually, covering a much wider range of flux."></canvas>
+        <div class="ctrl" style="margin-top:12px">
+          <label for="r-t">Exposure <input type="range" id="r-t" min="-4" max="-1" step="0.25" value="-2"><output id="r-t-o" for="r-t">10 ms</output></label>
+          <label for="r-d">SPAD dead time <input type="range" id="r-d" min="1" max="3" step="0.05" value="2.176"><output id="r-d-o" for="r-d">150 ns</output></label>
+        </div>
+        <div class="read" style="margin-top:10px">
+          <span>Conventional pixel <b id="r-cmos">80 dB</b></span>
+          <span>SPAD <b id="r-spad">122 dB</b></span>
+          <span id="r-hover">Hover the chart to read values</span>
+        </div>
+      </figure>
+      <p class="cap">Illustrative model of ideal sensors with quantum efficiency 0.45. The conventional pixel has a 10,000 e⁻ full well. The SPAD follows the passive-mode mean count used in the paper. Dynamic range runs from one expected detection per exposure to clipping (conventional) or 95% of the maximum count rate (SPAD). Read noise and dark counts are ignored.</p>
+    </div>
+  </section>
+
+  <section id="abstract">
+    <h2>Abstract</h2>
+    <div class="body">
+      <p>CMOS sensors have limited dynamic range. Dark regions drown in electronic noise and bright regions saturate. Fusing several exposures extends the range, but moving scenes then show ghosting and flicker. Single-photon avalanche diode (SPAD) sensors, also called single-photon cameras (SPCs), detect individual photons with precise timing and have no analog-to-digital readout step. Their nonlinear response handles both very low and very high light. The images they produce, however, are noisy, monochrome and hard to look at.</p>
+      <p>This paper asks which existing networks best turn monochrome SPC images into colour HDR images. We split the problem in two: an image-to-image translation network adds colour, then a single-image HDR network expands the dynamic range. We compare every combination at two resolutions, from one SPC frame and from four averaged frames. We also train a single network that maps SPC frames straight to HDR.</p>
+    </div>
+  </section>
+
+  <section id="method">
+    <h2>Method</h2>
+    <div class="body">
+      <div class="pipe" role="list">
+        <div class="stage" role="listitem">
+          <span class="k">Input</span>
+          <h3>Simulated SPC frames</h3>
+          <p>HDR images are passed through a passive-mode SPAD model, giving monochrome 8-bit frames. We use one frame or average four.</p>
+        </div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="stage" role="listitem">
+          <span class="k">Stage 1 · colour</span>
+          <h3>Image-to-image translation</h3>
+          <div class="chips"><span class="chip win">Pix2PixHD</span><span class="chip">Pix2Pix</span><span class="chip">CycleGAN</span></div>
+        </div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="stage" role="listitem">
+          <span class="k">Stage 2 · dynamic range</span>
+          <h3>Single-image HDR</h3>
+          <div class="chips"><span class="chip win">DeepHDR</span><span class="chip">ExpandNet</span><span class="chip">LHDR</span><span class="chip">SIHDR</span></div>
+        </div>
+      </div>
+      <div class="pipe">
+        <div class="stage alt">
+          <span class="k">Single-stage alternative</span>
+          <h3>Modified Pix2PixHD, SPC → 32-bit HDR</h3>
+          <p>One network trained directly against HDR ground truth, skipping the intermediate colour image.</p>
+        </div>
+      </div>
+      <p>The three translation networks and four HDR networks give twelve two-stage pipelines. We train the translation networks ourselves and use the HDR networks pre-trained.</p>
+      <figure class="paperfig">
+        <button type="button" class="zoom" data-title="Figure 2 · All two-stage combinations"><img src="img/hdr-overview.jpg" width="3400" height="541" loading="lazy" alt="Diagram from the paper: a monochrome SPC image feeds Pix2Pix, Pix2PixHD or CycleGAN for colour, and each colour output feeds DeepHDR, LHDR, SIHDR or ExpandNet for HDR."></button>
+        <figcaption class="figcap"><b>Figure 2</b>Every combination we compared, from a monochrome SPC image to colour HDR. Click to enlarge.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="simulation">
+    <h2>Data</h2>
+    <div class="body">
+      <div class="math" aria-label="Mean and variance of the SPAD photon count">
+        <span>E[N]   = q·φ·T / (1 + q·φ·τ<sub>d</sub>)</span>
+        <span>Var[N] = q·φ·T / (1 + q·φ·τ<sub>d</sub>)³</span>
+        <span class="note">Photon arrivals are Poisson. N is the number of detections in exposure T, φ the photon flux, q the quantum efficiency and τ<sub>d</sub> the dead time.</span>
+      </div>
+      <dl class="kv">
+        <dt>Dataset</dt><dd>Laval Indoor HDR, 2,362 images at 7768 × 3884</dd>
+        <dt>Resolutions</dt><dd>Downsampled to 1024 × 512 and 2048 × 1024</dd>
+        <dt>SPAD model</dt><dd>Passive mode, dead time 150 ns. The grayscale HDR image is the photon flux, and exposure is set from scene luminance.</dd>
+        <dt>Frames</dt><dd>1 frame, or 4 frames averaged</dd>
+        <dt>Display</dt><dd>Logarithmic tone mapping (chosen over Reinhard and adaptive logarithmic)</dd>
+        <dt>Metrics</dt><dd>LPIPS, PSNR and SSIM for colour. HDR-VDP-3 quality score Q for HDR.</dd>
+        <dt>Hardware</dt><dd>Two NVIDIA RTX 3090 GPUs</dd>
+      </dl>
+      <figure class="paperfig narrow">
+        <button type="button" class="zoom" data-title="Figure 1 · SPC simulation"><img src="img/hdr-simulator.jpg" width="1300" height="1900" loading="lazy" alt="Figure from the paper: a ground-truth HDR panorama of a corridor is downsampled to 1024×512 and 2048×1024, passed through the single-photon camera simulator, and output as noisy monochrome SPC images from 1 frame and from 4 averaged frames."></button>
+        <figcaption class="figcap"><b>Figure 1</b>Simulating SPC frames. A Laval Indoor HDR panorama is downsampled to two resolutions, and the simulator outputs single-frame and four-frame-averaged monochrome images.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="results">
+    <h2>Results</h2>
+    <div class="body">
+      <h3>Stage 1: monochrome SPC to colour</h3>
+      <div class="ctrl">
+        <span>SPC input</span>
+        <div class="seg" role="group" aria-label="Number of SPC frames for the colour table">
+          <button type="button" data-f="1" aria-pressed="true">1 frame</button>
+          <button type="button" data-f="4" aria-pressed="false">4 frames</button>
+        </div>
+      </div>
+      <div class="tbl">
+        <table id="t1">
+          <thead><tr><th>Network</th><th>Resolution</th><th>LPIPS ↓</th><th>PSNR ↑</th><th>SSIM ↑</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="cap">Best value at each resolution highlighted. Pix2PixHD leads on every metric at both resolutions. Averaging four frames lowers LPIPS and raises SSIM further.</p>
+      <figure class="paperfig">
+        <button type="button" class="zoom" id="f-color-btn" data-title="Figure 4 · Colour results from 1 SPC frame"><img id="f-color" src="img/hdr-color-1frame.jpg" width="2000" height="888" loading="lazy" alt="Figure from the paper: monochrome SPC inputs, colour outputs from CycleGAN, Pix2Pix and Pix2PixHD, and the tone-mapped ground truth, at 2048×1024 from one SPC frame."></button>
+        <figcaption class="figcap" id="f-color-cap"><b>Figure 4</b>Colour results from one SPC frame at 2048 × 1024. From left: SPC input, CycleGAN, Pix2Pix, Pix2PixHD, ground truth (tone-mapped). Pix2PixHD comes closest. Switch to 4 frames above to see Figure 5.</figcaption>
+      </figure>
+
+      <h3 style="margin-top:14px">Full pipeline: SPC to colour HDR</h3>
+      <div class="ctrl">
+        <span>SPC input</span>
+        <div class="seg" role="group" aria-label="Number of SPC frames for the HDR chart">
+          <button type="button" data-q="1" aria-pressed="true">1 frame</button>
+          <button type="button" data-q="4" aria-pressed="false">4 frames</button>
+        </div>
+        <span>Resolution</span>
+        <div class="seg" role="group" aria-label="Resolution for the HDR chart">
+          <button type="button" data-r="0" aria-pressed="false">1024 × 512</button>
+          <button type="button" data-r="1" aria-pressed="true">2048 × 1024</button>
+        </div>
+      </div>
+      <div class="bars" id="bars" aria-live="polite"></div>
+      <p class="cap">HDR-VDP-3 quality score Q (higher is better), averaged over 262 test images. Bars are drawn from zero. The yellow bar is the single-stage Pix2PixHD, which comes close to the best two-stage pipeline but stays below it.</p>
+      <figure class="paperfig">
+        <button type="button" class="zoom" data-title="Figure 6 · Colour HDR results"><img src="img/hdr-results.jpg" width="2000" height="1070" loading="lazy" alt="Figure from the paper: four indoor panoramas. Columns show the 1-frame monochrome SPC image, Pix2PixHD + DeepHDR, single-stage Pix2PixHD, and the ground-truth HDR."></button>
+        <figcaption class="figcap"><b>Figure 6</b>Colour HDR from a single SPC frame at 2048 × 1024. From left: monochrome SPC input, two-stage Pix2PixHD + DeepHDR, single-stage Pix2PixHD, ground-truth HDR (log tone-mapped).</figcaption>
+      </figure>
+      <figure class="paperfig">
+        <button type="button" class="zoom" data-title="Figure 3 · Best pipelines"><img src="img/hdr-best.jpg" width="3000" height="943" loading="lazy" alt="Diagram from the paper showing the best two-stage pipeline, Pix2PixHD followed by DeepHDR, and the single-stage modified Pix2PixHD."></button>
+        <figcaption class="figcap"><b>Figure 3</b>The winning two-stage pipeline (Pix2PixHD → DeepHDR) and the single-stage alternative.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="findings">
+    <h2>Findings</h2>
+    <div class="body">
+      <ul class="list">
+        <li>Pix2PixHD is the strongest colourisation network at both resolutions. Its multi-scale discriminators keep colour and texture where Pix2Pix and CycleGAN lose them.</li>
+        <li>Pix2PixHD followed by DeepHDR is the best of the twelve pipelines, with Q = 4.01 from four frames at 2048 × 1024.</li>
+        <li>CycleGAN struggles to keep colours and reconstructs light sources poorly at the higher resolution.</li>
+        <li>Higher resolution and averaging four frames both improve the HDR score for every pipeline.</li>
+        <li>Single-image HDR networks are built to expand the bit depth of LDR photos. Going directly from monochrome SPC to colour HDR needs extra losses, and adversarial losses look promising.</li>
+      </ul>
+      <p>SPADs can record more than 96,000 frames per second. A natural next step is high-frame-rate colour HDR video.</p>
+    </div>
+  </section>
+
+  <section id="bibtex">
+    <h2>BibTeX</h2>
+    <div class="body">
+<pre class="bib" id="bib">@inproceedings{sharma2024spchdr,
+  title     = {Transforming Single Photon Camera Images to Color High Dynamic Range Images},
+  author    = {Sharma, Sumit and Rongali, Girish and Mitra, Kaushik},
+  booktitle = {Computer Vision and Image Processing (CVIP 2024), Part V},
+  series    = {Communications in Computer and Information Science},
+  volume    = {2477},
+  publisher = {Springer Nature Switzerland},
+  address   = {Cham},
+  doi       = {10.1007/978-3-031-93709-5_10},
+  year      = {2026}
+}</pre>
+      <button type="button" class="copy" data-copy="bib">Copy BibTeX</button>
+      <p class="cap">Supported in part by the IITM Pravartak Technologies Foundation.</p>
+    </div>
+  </section>
+
+  <p class="cap" style="padding-bottom:20px">Figures 1 to 6 are reproduced from the arXiv version of the paper (CC BY 4.0).</p>
+  <footer>
+    <a href="../">← Back to Sumit Sharma's homepage</a>
+    <span>Department of Electrical Engineering · IIT Madras</span>
+  </footer>
+</div>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged figure" hidden>
+  <div class="lbbar">
+    <span id="lb-title"></span>
+    <button type="button" id="lb-fit">Actual size</button>
+    <button type="button" id="lb-close">Close</button>
+  </div>
+  <div class="lbscroll"><img id="lb-img" alt=""></div>
+</div>
+
+<script>
+(function () {
+  // Full-screen figure viewer
+  var lb = document.getElementById('lightbox'), im = document.getElementById('lb-img'), title = document.getElementById('lb-title');
+  var fit = document.getElementById('lb-fit'), close = document.getElementById('lb-close'), last = null;
+  document.querySelectorAll('.zoom').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var i = b.querySelector('img');
+      im.src = i.src; im.alt = i.alt; im.className = 'fit';
+      title.textContent = b.getAttribute('data-title') || '';
+      fit.textContent = 'Actual size';
+      lb.hidden = false; last = b; close.focus();
+    });
+  });
+  function shut() { lb.hidden = true; im.removeAttribute('src'); if (last) last.focus(); }
+  close.addEventListener('click', shut);
+  lb.addEventListener('click', function (e) { if (e.target === lb) shut(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !lb.hidden) shut(); });
+  fit.addEventListener('click', function () { var f = im.classList.toggle('fit'); fit.textContent = f ? 'Actual size' : 'Fit to screen'; });
+
+  // The colour-results figure follows the 1-frame / 4-frame switch above the table
+  var fig = document.getElementById('f-color'), btn = document.getElementById('f-color-btn'), cap = document.getElementById('f-color-cap');
+  if (!fig) return;
+  document.querySelectorAll('[data-f]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var four = b.getAttribute('data-f') === '4';
+      fig.src = four ? 'img/hdr-color-4frames.jpg' : 'img/hdr-color-1frame.jpg';
+      fig.alt = 'Figure from the paper: monochrome SPC inputs, colour outputs from CycleGAN, Pix2Pix and Pix2PixHD, and the tone-mapped ground truth, at 2048×1024 from ' + (four ? 'four averaged SPC frames.' : 'one SPC frame.');
+      btn.setAttribute('data-title', four ? 'Figure 5 · Colour results from 4 averaged SPC frames' : 'Figure 4 · Colour results from 1 SPC frame');
+      cap.innerHTML = four
+        ? '<b>Figure 5</b>Colour results from four averaged SPC frames at 2048 × 1024. From left: SPC input, CycleGAN, Pix2Pix, Pix2PixHD, ground truth. Averaging cleans up the input, and Pix2PixHD is still closest.'
+        : '<b>Figure 4</b>Colour results from one SPC frame at 2048 × 1024. From left: SPC input, CycleGAN, Pix2Pix, Pix2PixHD, ground truth (tone-mapped). Pix2PixHD comes closest. Switch to 4 frames above to see Figure 5.';
+    });
+  });
+})();
+</script>
+
+<script>
+(function () {
+  var cs = getComputedStyle(document.documentElement);
+  function tok(n, f) { return cs.getPropertyValue(n).trim() || f; }
+  var C = { accent: tok('--accent', '#6FCBF2'), photon: tok('--photon', '#FFE7A3'), ink: tok('--ink', '#F1F5F9'),
+    muted: tok('--muted', '#B3C0CD'), dim: tok('--dim', '#6E7F90'), grid: tok('--grid', '#1C2834'), award: tok('--award', '#EBC064') };
+  var MONO = '"IBM Plex Mono", ui-monospace, Menlo, monospace';
+
+  // ---- Response chart: conventional pixel vs SPAD ----
+  var cv = document.getElementById('resp'), g = cv.getContext('2d');
+  var tIn = document.getElementById('r-t'), dIn = document.getElementById('r-d');
+  var Q = 0.45, FW = 10000, X0 = 2, X1 = 11, W = 0, H = 0, hoverX = null;
+  function T() { return Math.pow(10, +tIn.value); }
+  function TD() { return Math.pow(10, +dIn.value) * 1e-9; }
+  function cmos(phi) { return Math.min(1, Q * phi * T() / FW); }
+  function spad(phi) { var x = Q * phi * TD(); return x / (1 + x); }
+  function fmtT(t) { return t >= 1e-3 ? +(t * 1e3).toPrecision(3) + ' ms' : +(t * 1e6).toPrecision(3) + ' µs'; }
+  function fmtFlux(lg) { var e = Math.floor(lg), m = Math.pow(10, lg - e); return m.toFixed(1) + '×10' + sup(e); }
+  function sup(n) { var s = '⁰¹²³⁴⁵⁶⁷⁸⁹', o = ''; String(n).split('').forEach(function (c) { o += c === '-' ? '⁻' : s[+c]; }); return o; }
+  function size() {
+    var r = cv.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2);
+    W = r.width; H = r.height; cv.width = Math.round(W * d); cv.height = Math.round(H * d); g.setTransform(d, 0, 0, d, 0, 0);
+  }
+  function text(s, x, y, col, al, sz) { g.font = (sz || 11) + 'px ' + MONO; g.fillStyle = col; g.textAlign = al || 'left'; g.textBaseline = 'middle'; g.fillText(s, x, y); }
+  function draw() {
+    var pl = 44, pr = 12, pt = 14, pb = 70, w = W - pl - pr, h = H - pt - pb;
+    function X(lg) { return pl + (lg - X0) / (X1 - X0) * w; }
+    function Y(v) { return pt + h - v * h; }
+    g.clearRect(0, 0, W, H);
+    var step = W < 480 ? 2 : 1;
+    for (var e = X0; e <= X1; e++) {
+      g.fillStyle = C.grid; g.fillRect(Math.round(X(e)), pt, 1, h);
+      if ((e - X0) % step === 0) text('10' + sup(e), X(e), pt + h + 12, C.dim, 'center', 10.5);
+    }
+    [0, 0.5, 1].forEach(function (v) { g.fillStyle = C.grid; g.fillRect(pl, Math.round(Y(v)), w, 1); text(v.toFixed(1), pl - 8, Y(v), C.dim, 'right', 10.5); });
+    text('photon flux (photons / s)', pl + w, pt + h + 28, C.dim, 'right', 10.5);
+    text('output', 4, pt - 4, C.dim, 'left', 10.5);
+    function curve(f, col) {
+      g.strokeStyle = col; g.lineWidth = 2; g.beginPath();
+      for (var i = 0; i <= w; i++) { var lg = X0 + i / w * (X1 - X0), y = Y(f(Math.pow(10, lg))); i ? g.lineTo(pl + i, y) : g.moveTo(pl + i, y); }
+      g.stroke();
+    }
+    curve(cmos, C.muted); curve(spad, C.accent);
+    // Usable ranges as bars under the axis
+    var t = T(), td = TD();
+    var cLo = Math.log10(1 / (Q * t)), cHi = Math.log10(FW / (Q * t));
+    var sLo = Math.log10(1 / (Q * t)), sHi = Math.log10(19 / (Q * td));
+    function range(lo, hi, y, col, label) {
+      var a = Math.max(pl, X(lo)), b = Math.min(pl + w, X(hi));
+      g.fillStyle = col; g.globalAlpha = 0.85; g.fillRect(a, y, Math.max(2, b - a), 5); g.globalAlpha = 1;
+      text(label, a, y + 13, col, 'left', 10.5);
+    }
+    range(cLo, cHi, pt + h + 36, C.muted, 'conventional');
+    range(sLo, sHi, pt + h + 52, C.accent, 'SPAD');
+    document.getElementById('r-cmos').textContent = Math.round(20 * (cHi - cLo)) + ' dB';
+    document.getElementById('r-spad').textContent = Math.round(20 * (sHi - sLo)) + ' dB';
+    // Labels on curves
+    var lgC = Math.min(X1 - 0.6, cHi + 0.3); text('conventional pixel clips', X(lgC), Y(1) + 12, C.muted, lgC > X1 - 2 ? 'right' : 'left', 10.5);
+    var lgS = Math.log10(1 / (Q * td)); text('SPAD keeps rising', X(Math.min(X1 - 1.8, lgS + 0.4)), Y(0.5), C.accent, 'left', 10.5);
+    if (hoverX != null && hoverX >= pl && hoverX <= pl + w) {
+      var lgH = X0 + (hoverX - pl) / w * (X1 - X0), phi = Math.pow(10, lgH);
+      g.fillStyle = C.ink; g.globalAlpha = 0.5; g.fillRect(Math.round(hoverX), pt, 1, h); g.globalAlpha = 1;
+      [[cmos(phi), C.muted], [spad(phi), C.accent]].forEach(function (p) { g.fillStyle = p[1]; g.beginPath(); g.arc(hoverX, Y(p[0]), 3.5, 0, 7); g.fill(); });
+      document.getElementById('r-hover').textContent = 'flux ' + fmtFlux(lgH) + ' · conventional ' + cmos(phi).toFixed(2) + ' · SPAD ' + spad(phi).toFixed(2);
+    }
+  }
+  function sync() {
+    document.getElementById('r-t-o').textContent = fmtT(T());
+    document.getElementById('r-d-o').textContent = Math.round(TD() * 1e9) + ' ns';
+    draw();
+  }
+  cv.addEventListener('pointermove', function (e) { hoverX = e.clientX - cv.getBoundingClientRect().left; draw(); });
+  cv.addEventListener('pointerleave', function () { hoverX = null; document.getElementById('r-hover').textContent = 'Hover the chart to read values'; draw(); });
+  tIn.addEventListener('input', sync); dIn.addEventListener('input', sync);
+  window.addEventListener('resize', function () { size(); draw(); });
+  size(); sync();
+
+  // ---- Table 1: colourisation ----
+  var T1 = [
+    ['Pix2PixHD', '1024 × 512', [0.2417, 0.2029], [25.34, 25.36], [0.8456, 0.8718]],
+    ['Pix2Pix', '1024 × 512', [0.4102, 0.3901], [24.87, 25.09], [0.8279, 0.848]],
+    ['CycleGAN', '1024 × 512', [0.4068, 0.3973], [23.1, 23.25], [0.8192, 0.8235]],
+    ['Pix2PixHD', '2048 × 1024', [0.2254, 0.1995], [26.53, 26.5], [0.887, 0.9056]],
+    ['Pix2Pix', '2048 × 1024', [0.4418, 0.443], [25.25, 25.23], [0.8641, 0.8701]],
+    ['CycleGAN', '2048 × 1024', [0.4498, 0.4547], [23.2, 23.07], [0.8384, 0.8364]]
+  ];
+  var tb = document.querySelector('#t1 tbody');
+  function renderT1(fi) {
+    var html = '';
+    for (var g0 = 0; g0 < 6; g0 += 3) {
+      var rows = T1.slice(g0, g0 + 3);
+      var bL = Math.min.apply(null, rows.map(function (r) { return r[2][fi]; }));
+      var bP = Math.max.apply(null, rows.map(function (r) { return r[3][fi]; }));
+      var bS = Math.max.apply(null, rows.map(function (r) { return r[4][fi]; }));
+      rows.forEach(function (r) {
+        html += '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td>' +
+          '<td' + (r[2][fi] === bL ? ' class="best"' : '') + '>' + r[2][fi].toFixed(4) + '</td>' +
+          '<td' + (r[3][fi] === bP ? ' class="best"' : '') + '>' + r[3][fi].toFixed(2) + '</td>' +
+          '<td' + (r[4][fi] === bS ? ' class="best"' : '') + '>' + r[4][fi].toFixed(4) + '</td></tr>';
+      });
+    }
+    tb.innerHTML = html;
+  }
+  document.querySelectorAll('[data-f]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('[data-f]').forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
+      renderT1(b.getAttribute('data-f') === '1' ? 0 : 1);
+    });
+  });
+  renderT1(0);
+
+  // ---- HDR-VDP-3 bars: [1f low, 1f high, 4f low, 4f high] ----
+  var T2 = [
+    ['Pix2PixHD + ExpandNet', 3.1596, 3.41, 3.2667, 3.4533],
+    ['Pix2PixHD + DeepHDR', 3.6388, 3.9078, 3.7393, 4.0079],
+    ['Pix2PixHD + SIHDR', 2.7251, 3.1357, 2.824, 3.2111],
+    ['Pix2PixHD + LHDR', 3.1131, 3.386, 3.2056, 3.4339],
+    ['Pix2Pix + ExpandNet', 3.0453, 3.1783, 3.1666, 3.2977],
+    ['Pix2Pix + DeepHDR', 3.4545, 3.5753, 3.5624, 3.6699],
+    ['Pix2Pix + SIHDR', 2.8896, 3.0503, 3.0131, 3.1685],
+    ['Pix2Pix + LHDR', 3.1354, 3.2717, 3.2344, 3.3639],
+    ['CycleGAN + ExpandNet', 2.9679, 3.1897, 3.1041, 3.2136],
+    ['CycleGAN + DeepHDR', 3.3189, 3.5239, 3.4861, 3.581],
+    ['CycleGAN + SIHDR', 2.7932, 3.0345, 2.9699, 3.1025],
+    ['CycleGAN + LHDR', 3.0445, 3.2358, 3.118, 3.2432]
+  ];
+  var SINGLE = ['Single-stage Pix2PixHD', 3.4868, 3.8355, 3.6154, 3.9734];
+  var qf = 1, qr = 1, barsEl = document.getElementById('bars');
+  function renderBars() {
+    var idx = 1 + (qf === 4 ? 2 : 0) + qr;
+    var rows = T2.map(function (r) { return { n: r[0], v: r[idx], s: false }; });
+    rows.push({ n: SINGLE[0], v: SINGLE[idx], s: true });
+    rows.sort(function (a, b) { return b.v - a.v; });
+    var top = Math.max.apply(null, rows.filter(function (r) { return !r.s; }).map(function (r) { return r.v; }));
+    var max = 4.2;
+    barsEl.innerHTML = rows.map(function (r) {
+      var cls = 'bar' + (r.s ? ' single' : r.v === top ? ' top' : '');
+      return '<div class="' + cls + '"><span class="lab">' + r.n + '</span><span class="track"><span class="fill" style="display:block;width:' + (r.v / max * 100).toFixed(1) + '%"></span></span><span class="val">' + r.v.toFixed(2) + '</span></div>';
+    }).join('');
+  }
+  function segGroup(attr, set) {
+    document.querySelectorAll('[' + attr + ']').forEach(function (b) {
+      b.addEventListener('click', function () {
+        document.querySelectorAll('[' + attr + ']').forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
+        set(+b.getAttribute(attr)); renderBars();
+      });
+    });
+  }
+  segGroup('data-q', function (v) { qf = v; });
+  segGroup('data-r', function (v) { qr = v; });
+  renderBars();
+
+  // ---- Copy BibTeX ----
+  document.querySelectorAll('[data-copy]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var el = document.getElementById(b.getAttribute('data-copy'));
+      var done = function () { b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy BibTeX'; }, 1600); };
+      var sel = function () { var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Selected, press Ctrl+C'; };
+      try { navigator.clipboard.writeText(el.textContent).then(done, sel); } catch (e) { sel(); }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
